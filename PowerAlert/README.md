@@ -42,6 +42,10 @@
 
 ![スクリーンショット](Images/poweralert-6.png)
 
+##履歴
+
+:scroll: [履歴](History.md)
+
 ##ライセンス
 
  - MIT License
