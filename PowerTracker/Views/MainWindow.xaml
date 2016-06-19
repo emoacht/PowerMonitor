@@ -1,0 +1,125 @@
+﻿<Window x:Class="PowerTracker.Views.MainWindow"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:viewModels="clr-namespace:PowerTracker.ViewModels"
+		xmlns:views="clr-namespace:PowerTracker.Views"
+		xmlns:converters="clr-namespace:PowerTracker.Views.Converters"
+		Title="Power Tracker"
+		Width="660" Height="480">
+	<Window.DataContext>
+		<viewModels:MainWindowViewModel/>
+	</Window.DataContext>
+
+	<Window.Resources>
+		<converters:TimeConverter x:Key="TimeConverterKey" Interval="5"/>
+	</Window.Resources>
+
+	<Grid UseLayoutRounding="True">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="*"/>
+		</Grid.RowDefinitions>
+
+		<StackPanel Grid.Row="0"
+					Margin="0,2,0,0"
+					Orientation="Horizontal">
+			<Label Content="Check Interval"/>
+			<Slider x:Name="SliderCheckInterval"
+					Width="80" VerticalAlignment="Center"
+					Minimum="3" Maximum="60" SmallChange="1" IsSnapToTickEnabled="True"
+					Value="{Binding CheckInterval, Delay=100}"/>
+			<TextBox Width="30" Height="22"
+					 Margin="4,0" VerticalAlignment="Center"
+					 HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+					 Text="{Binding ElementName=SliderCheckInterval, Path=Value}"/>
+		</StackPanel>
+
+		<ListView Grid.Row="1"
+				  ItemsSource="{Binding Companies}">
+			<ListView.Template>
+				<ControlTemplate TargetType="{x:Type ListView}">
+					<Border BorderThickness="0">
+						<ScrollViewer CanContentScroll="False"
+									  HorizontalScrollBarVisibility="Disabled"
+									  VerticalScrollBarVisibility="Auto">
+							<WrapPanel IsItemsHost="True"/>
+						</ScrollViewer>
+					</Border>
+				</ControlTemplate>
+			</ListView.Template>
+			<ListView.ItemContainerStyle>
+				<Style TargetType="{x:Type ListViewItem}">
+					<Setter Property="Background" Value="LightGray"/>
+					<Setter Property="Margin" Value="4,4,0,0"/>
+					<Setter Property="OverridesDefaultStyle" Value="True"/>
+					<Setter Property="Template">
+						<Setter.Value>
+							<ControlTemplate TargetType="{x:Type ContentControl}">
+								<ContentPresenter/>
+							</ControlTemplate>
+						</Setter.Value>
+					</Setter>
+				</Style>
+			</ListView.ItemContainerStyle>
+			<ListView.ItemTemplate>
+				<DataTemplate>
+					<Grid Width="120" Height="200"
+						  Background="DimGray">
+						<Grid.RowDefinitions>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="*"/>
+						</Grid.RowDefinitions>
+
+						<StackPanel Grid.Row="0"
+									Margin="2,0,2,2">
+							<TextBlock Foreground="White" FontWeight="Bold"
+									   Text="{Binding Name, Mode=OneTime}"/>
+							<TextBlock Foreground="White"
+									   Text="{Binding PeakSupply}"/>
+							<TextBlock Foreground="White"
+									   Text="{Binding UsageAmount}"/>
+							<TextBlock Foreground="White"
+									   Text="{Binding UsagePercentage, StringFormat={}{0:f1}%}"/>
+							<TextBlock Foreground="White"
+									   Text="{Binding DataTime, StringFormat={}{0:HH:mm:ss}}"/>
+						</StackPanel>
+
+						<ListView Grid.Row="1"
+								  ItemsSource="{Binding DataUpdateTimes}">
+							<ListView.Template>
+								<ControlTemplate TargetType="{x:Type ListView}">
+									<Border BorderThickness="0">
+										<ScrollViewer CanContentScroll="True"
+													  Background="LightGray"
+													  HorizontalScrollBarVisibility="Hidden"
+													  VerticalScrollBarVisibility="Auto">
+											<VirtualizingStackPanel IsItemsHost="True"/>
+										</ScrollViewer>
+									</Border>
+								</ControlTemplate>
+							</ListView.Template>
+							<ListView.ItemContainerStyle>
+								<Style TargetType="{x:Type ListViewItem}">
+									<Setter Property="Margin" Value="2,0"/>
+									<Setter Property="OverridesDefaultStyle" Value="True"/>
+									<Setter Property="Template">
+										<Setter.Value>
+											<ControlTemplate TargetType="{x:Type ContentControl}">
+												<ContentPresenter/>
+											</ControlTemplate>
+										</Setter.Value>
+									</Setter>
+								</Style>
+							</ListView.ItemContainerStyle>
+							<ListView.ItemTemplate>
+								<DataTemplate>
+									<TextBlock Text="{Binding Converter={StaticResource TimeConverterKey}}"/>
+								</DataTemplate>
+							</ListView.ItemTemplate>
+						</ListView>
+					</Grid>
+				</DataTemplate>
+			</ListView.ItemTemplate>
+		</ListView>
+	</Grid>
+</Window>
