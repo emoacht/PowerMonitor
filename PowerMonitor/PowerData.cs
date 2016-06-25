@@ -86,8 +86,8 @@ namespace PowerMonitor
 					UpdateTime = updateTimeBuff.ToJst();
 			}
 
-			var peakSupplyHeaderIndex = records.FindIndex(x => x.StartsWith(PeakSupplyHeaderStart));
-			var actualUsageHeaderIndex = records.FindLastIndex(x => x.StartsWith(ActualUsageHeaderStart));
+			int peakSupplyHeaderIndex = records.FindIndex(x => x.StartsWith(PeakSupplyHeaderStart));
+			int actualUsageHeaderIndex = records.FindLastIndex(x => x.StartsWith(ActualUsageHeaderStart));
 
 			if ((0 <= peakSupplyHeaderIndex) && (0 <= actualUsageHeaderIndex))
 			{
@@ -100,7 +100,7 @@ namespace PowerMonitor
 						PeakSupply = supplyBuff;
 				}
 
-				var currentDate = DateTimeOffset.Now.ToJst().Date;
+				DateTimeOffset currentDate = DateTimeOffset.Now.ToJst().Date;
 
 				foreach (var usageRecord in records.Skip(actualUsageHeaderIndex + 1))
 				{

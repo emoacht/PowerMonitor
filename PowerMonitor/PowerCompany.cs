@@ -80,6 +80,21 @@ namespace PowerMonitor
 			return await CheckAsync(url);
 		}
 
+		/// <summary>
+		/// Checks the power data.
+		/// </summary>
+		/// <param name="ifModifiedSince">If-Modified-Since time</param>
+		/// <returns>Result of checking operation</returns>
+		public async Task<CheckResult> CheckAsync(DateTimeOffset ifModifiedSince)
+		{
+			var result = await CheckAsync();
+
+			if ((result == CheckResult.NotModified) && (ifModifiedSince < CheckTime))
+				return CheckResult.Success;
+
+			return result;
+		}
+
 		private async Task<CheckResult> CheckAsync(string url)
 		{
 			if (!NetworkInterface.GetIsNetworkAvailable())
@@ -229,13 +244,13 @@ namespace PowerMonitor
 			{
 				var assembly = Assembly.Load(new AssemblyName(assemblyName));
 
-				using (var s = assembly.GetManifestResourceStream(resourceName))
-				using (var sr = new StreamReader(s))
-					return sr.ReadToEnd();
+				using (var stream = assembly.GetManifestResourceStream(resourceName))
+				using (var reader = new StreamReader(stream))
+					return reader.ReadToEnd();
 			}
 			catch (Exception ex)
 			{
-				Debug.WriteLine(ex);
+				Debug.WriteLine($"Failed to load an embedded file.\r\n{ex}");
 				return null;
 			}
 		}
