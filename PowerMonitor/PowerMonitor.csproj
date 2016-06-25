@@ -34,6 +34,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="CheckResult.cs" />
     <Compile Include="Helper\DateTimeOffsetExtension.cs" />
     <Compile Include="PowerCompany.cs" />
     <Compile Include="PowerCompanyList.cs" />

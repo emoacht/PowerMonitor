@@ -58,7 +58,7 @@ namespace PowerTracker.ViewModels
 		{
 			var checkTime = DateTimeOffset.Now;
 
-			if (!await _company.CheckAsync())
+			if (await _company.CheckAsync() != CheckResult.Success)
 				return;
 
 			if (_updateTimeLast == _company.Data.UpdateTime)

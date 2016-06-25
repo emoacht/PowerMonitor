@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.NetworkInformation;
 using System.Reflection;
@@ -64,25 +65,25 @@ namespace PowerMonitor
 		public PowerData Data { get; private set; }
 
 		/// <summary>
-		/// The latest time when the power data is checked (not limited to success)
+		/// The latest time when the power data is checked with success
 		/// </summary>
 		public DateTimeOffset CheckTime { get; private set; }
 
 		/// <summary>
 		/// Checks the power data.
 		/// </summary>
-		/// <returns>True if successfully retrieved updated data. False if not.</returns>
-		public async Task<bool> CheckAsync()
+		/// <returns>Result of checking operation</returns>
+		public async Task<CheckResult> CheckAsync()
 		{
 			var url = Url.Replace("[yyyyMMdd]", DateTimeOffset.Now.ToJst().ToString("yyyyMMdd"));
 
 			return await CheckAsync(url);
 		}
 
-		private async Task<bool> CheckAsync(string url)
+		private async Task<CheckResult> CheckAsync(string url)
 		{
 			if (!NetworkInterface.GetIsNetworkAvailable())
-				return false;
+				return CheckResult.NotConnected;
 
 			try
 			{
@@ -92,10 +93,15 @@ namespace PowerMonitor
 					request.Headers.IfModifiedSince = CheckTime.ToJst();
 
 					var response = await client.SendAsync(request);
-					if (!response.IsSuccessStatusCode)
-						return false;
-
-					CheckTime = DateTimeOffset.Now;
+					switch (response.StatusCode)
+					{
+						case HttpStatusCode.OK:
+							break;
+						case HttpStatusCode.NotModified:
+							return CheckResult.NotModified;
+						default:
+							return CheckResult.Failed;
+					}
 
 					using (var stream = await response.Content.ReadAsStreamAsync())
 					using (var reader = new StreamReader(stream, Encoding.GetEncoding("Shift-JIS"), true))
@@ -104,17 +110,19 @@ namespace PowerMonitor
 
 						var data = new PowerData(source);
 						if (!data.IsLoaded)
-							return false;
+							return CheckResult.Failed;
 
 						this.Data = data;
-						return true;
 					}
+
+					CheckTime = DateTimeOffset.Now;
+					return CheckResult.Success;
 				}
 			}
 			catch (Exception ex)
 			{
 				Debug.WriteLine($"Failed to check power data at {Name}.\r\n {ex}");
-				return false;
+				return CheckResult.Failed;
 			}
 		}
 
