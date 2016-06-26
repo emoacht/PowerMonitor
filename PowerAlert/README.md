@@ -12,7 +12,7 @@
 
 ##ダウンロード
 
-:floppy_disk: [ダウンロード](https://github.com/emoacht/PowerMonitor/releases/download/1.5.0/PowerAlert150.zip)
+:floppy_disk: [ダウンロード](https://github.com/emoacht/PowerMonitor/releases/download/1.5.1/PowerAlert151.zip)
 
 ##使い方
 
