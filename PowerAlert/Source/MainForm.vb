@@ -205,23 +205,30 @@ Public Class MainForm
 
 	Private WithEvents CheckTimer As New Windows.Forms.Timer()
 
+	Private Const retryInterval As Integer = 20 'リトライまでの間隔（秒）
+
 	'次回チェック時刻と次回アラート最早時刻を調整する
-	Private Sub SetCheckAlertTime()
+	Private Sub SetCheckAlertTime(Optional shallRetry As Boolean = False)
 		CheckTimer.Enabled = False
 
-		'次回チェックまでの間隔を計算する
-		Dim checkTiming As Integer = (DateTimeOffset.Now.Minute * 60 + DateTimeOffset.Now.Second) Mod
-			(TargetCompany.Interval * 60) '更新間隔刻みの時刻と現在時刻の差（秒）
+		If (shallRetry) Then
+			'retryInterval後にリトライする
+			CheckTimer.Interval = retryInterval * 1000
+		Else
+			'次回チェックまでの間隔を計算する
+			Dim checkTiming As Integer = (DateTimeOffset.Now.Minute * 60 + DateTimeOffset.Now.Second) Mod
+				(TargetCompany.Interval * 60) '更新間隔刻みの時刻と現在時刻の差（秒）
 
-		If (checkTiming < TargetCompany.Offset) Then '差がOffsetより小さい場合、今回の更新時刻に間に合うので、その時刻にチェックする
-			CheckTimer.Interval = (TargetCompany.Offset - checkTiming) * 1000
+			If (checkTiming < TargetCompany.Offset) Then '差がOffsetより小さい場合、今回の更新時刻に間に合うので、その時刻にチェックする
+				CheckTimer.Interval = (TargetCompany.Offset - checkTiming) * 1000
 
-		ElseIf ((checkTiming = TargetCompany.Offset) AndAlso
-				(CheckTimeLast.AddSeconds(1) < DateTimeOffset.Now)) Then '差がOffsetと同じ場合で、かつチェック直後（1秒以内に完了すれば起こり得る）でない場合、すぐにチェックする
-			CheckTimer.Interval = 100 'Timer.Intervalは0にはできないため、0にはしない
+			ElseIf ((checkTiming = TargetCompany.Offset) AndAlso
+					(CheckTimeLast.AddSeconds(1) < DateTimeOffset.Now)) Then '差がOffsetと同じ場合で、かつチェック直後（1秒以内に完了すれば起こり得る）でない場合、すぐにチェックする
+				CheckTimer.Interval = 100 'Timer.Intervalは0にはできないため、0にはしない
 
-		Else '差がOffsetより大きい場合、今回の更新時刻には間に合わないので、次回の更新時刻にチェックする
-			CheckTimer.Interval = (TargetCompany.Interval * 60 + TargetCompany.Offset - checkTiming) * 1000
+			Else '差がOffsetより大きい場合、今回の更新時刻には間に合わないので、次回の更新時刻にチェックする
+				CheckTimer.Interval = (TargetCompany.Interval * 60 + TargetCompany.Offset - checkTiming) * 1000
+			End If
 		End If
 
 		'次回チェック時刻を記録する
@@ -235,7 +242,7 @@ Public Class MainForm
 
 	'自動チェック
 	Private Async Sub CheckTimer_Tick(sender As Object, e As EventArgs) Handles CheckTimer.Tick
-		Await CheckDataAsync()
+		Await CheckDataAsync(True)
 	End Sub
 
 	'手動チェック
@@ -258,28 +265,40 @@ Public Class MainForm
 		dataTimeLast = DateTimeOffset.MinValue
 		usagePercentageLast = 0
 
-		'表示をクリアする
+		notModifiedCount = 0
+
 		ClearAppearance()
 
 		Await CheckDataAsync()
 	End Sub
 
-	Private updateTimeLast As DateTimeOffset '前回のアップデート時刻
-	Private dataTimeLast As DateTimeOffset '前回のデータ時刻
-	Private usagePercentageLast As Double '前回の使用率
+	Private updateTimeLast As DateTimeOffset '前回アップデート時刻
+	Private dataTimeLast As DateTimeOffset '前回データ時刻
+	Private usagePercentageLast As Double '前回使用率
+
+	Private notModifiedCount As Integer = 0 '未更新の数
+	Private Const notModifiedCountMax As Integer = 6 '未更新の数の上限
 
 	'電力データをチェックする
-	Private Async Function CheckDataAsync() As Task
+	Private Async Function CheckDataAsync(Optional shallRetry As Boolean = False) As Task
 		IsChecking = True
 
 		'電力データを取得する
-		Await TargetCompany.CheckAsync()
+		Dim result As CheckResult = Await TargetCompany.CheckAsync(CheckTimeLast)
+
+		'チェック時刻を記録する
+		CheckTimeLast = DateTimeOffset.Now
 
 		If (TargetCompany.Data IsNot Nothing) Then
 			'アップデート時刻を記録する
 			updateTimeLast = TargetCompany.Data.UpdateTime
 
-			If (dataTimeLast < TargetCompany.Data.DataTime) Then '前回のデータ時刻と違う場合（初回チェックの場合を含む）
+			If (dataTimeLast = TargetCompany.Data.DataTime) Then '前回データ時刻と同じ場合
+				notModifiedCount += 1
+
+			Else '違う場合（初回チェックの場合を含む）
+				notModifiedCount = 0
+
 				'データ時刻を記録する
 				dataTimeLast = TargetCompany.Data.DataTime
 
@@ -339,17 +358,20 @@ Public Class MainForm
 			End If
 		End If
 
-		'前回のアップデート時刻から30分が過ぎている場合、表示をクリアする
+		'前回アップデート時刻から30分が過ぎている場合、表示をクリアする
 		If ((DateTimeOffset.MinValue < updateTimeLast) AndAlso
 			(updateTimeLast.AddMinutes(30) < DateTimeOffset.Now)) Then
 			ClearAppearance()
 		End If
 
-		'チェック時刻を記録する
-		CheckTimeLast = DateTimeOffset.Now
-
 		IsChecking = False
-		SetCheckAlertTime()
+
+		'リトライの可否を決める
+		shallRetry = shallRetry AndAlso
+			(result = CheckResult.NotModified) AndAlso
+			(notModifiedCount <= notModifiedCountMax)
+
+		SetCheckAlertTime(shallRetry)
 	End Function
 
 	Private Async Function RecordLogAsync(filePath As String, content As String) As Task

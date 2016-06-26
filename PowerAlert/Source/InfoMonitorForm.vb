@@ -102,8 +102,12 @@ Public Class InfoMonitorForm
 
 		'MainFormの電力会社の選択と一致させる
 		If (MonitoredCompanyIndex <> Settings.Current.TargetCompanyIndex) Then '前回の電力会社と違う場合（最初回で0のとき以外の場合も含まれるが、問題ない）
+			'初期化する
 			MonitorRemainingTime = TimeSpan.Zero
-			ClearListViewUpdateTimeItems()
+			checkTimeLast = DateTimeOffset.MinValue
+			dataTimeLast = DateTimeOffset.MinValue
+
+			ClearListView()
 		End If
 
 		MonitoredCompanyIndex = Settings.Current.TargetCompanyIndex '最初回で0のときでも会社名を表示させるためにセットする
@@ -117,7 +121,7 @@ Public Class InfoMonitorForm
 		End If
 
 		'初回チェック
-		Await CheckDataAsync(True)
+		Await CheckDataAsync()
 	End Sub
 
 	'モニターを停止する（再開できるので、終了ではない）
@@ -125,10 +129,25 @@ Public Class InfoMonitorForm
 		IsMonitoring = False
 	End Sub
 
+	Private checkTimeLast As DateTimeOffset '前回チェック時刻
+	Private dataTimeLast As DateTimeOffset '前回データ時刻
+
 	'電力データをチェックする
-	Private Async Function CheckDataAsync(Optional isInitial As Boolean = False) As Task
+	Private Async Function CheckDataAsync() As Task
+		Dim isInitial As Boolean = (checkTimeLast = DateTimeOffset.MinValue)
+
 		'電力データを取得する
-		If (Not Await MonitoredCompany.CheckAsync()) Then Exit Function
+		Dim result As CheckResult = Await MonitoredCompany.CheckAsync(checkTimeLast)
+
+		'チェック時刻を記録する
+		checkTimeLast = DateTimeOffset.Now
+
+		If (result <> CheckResult.Success) Then Exit Function
+
+		If (dataTimeLast = MonitoredCompany.Data.DataTime) Then Exit Function
+
+		'データ時刻を記録する
+		dataTimeLast = MonitoredCompany.Data.DataTime
 
 		'初回チェックの結果は使わない
 		If (isInitial) Then Exit Function
@@ -136,16 +155,14 @@ Public Class InfoMonitorForm
 		Dim updateTiming As Integer = (DateTimeOffset.Now.Minute * 60 + DateTimeOffset.Now.Second) Mod
 			(MonitoredCompany.Interval * 60) '更新間隔刻みの時刻と現在時刻の差（秒）
 
-		Dim content As String() = {Date.Now.ToString("H:mm:ss"),
-								   updateTiming.ToString(),
-								   MonitoredCompany.Data.UpdateTime.ToString("mm:ss"),
-								   MonitoredCompany.Data.DataTime.ToString("mm:ss")}
-
-		AddListViewUpdateTimeItem(content)
+		ChangeListView(checkTimeLast,
+					   updateTiming,
+					   MonitoredCompany.Data.UpdateTime,
+					   MonitoredCompany.Data.DataTime)
 	End Function
 
 	'ListViewに追加する
-	Private Sub AddListViewUpdateTimeItem(content As String())
+	Private Sub ChangeListView(checkTime As DateTimeOffset, updateTiming As Integer, updateTime As DateTimeOffset, dataTime As DateTimeOffset)
 		Dim targetIndex As Integer = ListView_UpdateTime.Items.
 			OfType(Of ListViewItem)().
 			ToList().
@@ -161,7 +178,12 @@ Public Class InfoMonitorForm
 			insertsItem = False
 		End If
 
-		Dim item As New ListViewItem({(targetIndex + 1).ToString()}.Concat(content).ToArray())
+		Dim item As New ListViewItem({
+			$"{targetIndex + 1}",
+			$"{checkTime:H:mm:ss}",
+			$"{updateTiming}",
+			$"{updateTime:mm:ss}",
+			$"{dataTime:mm:ss}"})
 
 		If (insertsItem) Then
 			ListView_UpdateTime.Items.RemoveAt(targetIndex)
@@ -174,7 +196,7 @@ Public Class InfoMonitorForm
 	End Sub
 
 	'ListViewをクリアする
-	Private Sub ClearListViewUpdateTimeItems()
+	Private Sub ClearListView()
 		If ((0 < ListView_UpdateTime.Items.Count) AndAlso
 			ListView_UpdateTime.Items(0).SubItems.
 				OfType(Of ListViewItem.ListViewSubItem)().
