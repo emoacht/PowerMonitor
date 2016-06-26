@@ -101,7 +101,7 @@ namespace PowerMonitor
 					name: "北海道電力",
 					url: @"http://denkiyoho.hepco.co.jp/data/juyo_hokkaidou.csv",
 					interval: 5,
-					offset: 260
+					offset: 250
 				),
 				new PowerCompany
 				(
@@ -122,14 +122,14 @@ namespace PowerMonitor
 					name: "北陸電力",
 					url: @"http://www.rikuden.co.jp/denki-yoho/csv/juyo_05_[yyyyMMdd].csv", // Date part must be replaced with current date.
 					interval: 10,
-					offset: 240
+					offset: 200
 				),
 				new PowerCompany
 				(
 					name: "中部電力",
 					url: @"http://denki-yoho.chuden.jp/denki_yoho_content_data/juyo_cepco003.csv",
 					interval: 5,
-					offset: 30
+					offset: 0
 				),
 				new PowerCompany
 				(
@@ -143,7 +143,7 @@ namespace PowerMonitor
 					name: "中国電力",
 					url: @"http://www.energia.co.jp/jukyuu/sys/juyo_07_[yyyyMMdd].csv", // Date part must be replaced with current date.
 					interval: 5,
-					offset: 30
+					offset: 270
 				),
 				new PowerCompany
 				(
@@ -157,7 +157,7 @@ namespace PowerMonitor
 					name: "九州電力",
 					url: @"http://www.kyuden.co.jp/power_usages/csv/juyo-hourly-[yyyyMMdd].csv", // Date part must be replaced with current date.
 					interval: 5,
-					offset: 30
+					offset: 270
 				),
 				new PowerCompany
 				(
