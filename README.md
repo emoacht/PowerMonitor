@@ -1,5 +1,5 @@
-﻿Power Monitor
-=============
+﻿# Power Monitor
+
 A library to check electric power data of Japanese electric power companies. All the 10 companies make available their power data and update them at regular intervals (basically 5 minutes).
 
  - [Hokkaido](http://www.hepco.co.jp/)
