@@ -99,7 +99,7 @@ namespace PowerMonitor
 				new PowerCompany
 				(
 					name: "北海道電力",
-					url: @"http://denkiyoho.hepco.co.jp/data/juyo_hokkaidou.csv",
+					url: @"http://denkiyoho.hepco.co.jp/area/data/juyo_01_[yyyyMMdd]", // Date part must be replaced with current date.
 					interval: 5,
 					offset: 250
 				),

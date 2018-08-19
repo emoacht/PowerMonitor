@@ -1,10 +1,10 @@
 ﻿{
-  "ListDate": "06/26/2016 08:00:00 +09:00",
+  "ListDate": "08/01/2018 08:00:00 +09:00",
   "ListUrl": "https://raw.githubusercontent.com/emoacht/PowerMonitor/master/PowerMonitor/companies.json",
   "Companies": [
     {
       "Name": "北海道電力",
-      "Url": "http://denkiyoho.hepco.co.jp/data/juyo_hokkaidou.csv",
+      "Url": "http://denkiyoho.hepco.co.jp/area/data/juyo_01_[yyyyMMdd].csv",
       "Interval": 5,
       "Offset": 250
     },
