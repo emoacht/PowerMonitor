@@ -70,6 +70,7 @@ Partial Class About
         'Panel_Color
         '
         Me.Panel_Color.BackgroundImage = Global.PowerAlert.My.Resources.Resources.colorchart
+        Me.Panel_Color.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.Panel_Color.Controls.Add(Me.Label_ProductVersion)
         Me.Panel_Color.Controls.Add(Me.Label_ProductName)
         Me.Panel_Color.Controls.Add(Me.Label_Copyright)
