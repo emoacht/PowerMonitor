@@ -7,11 +7,11 @@
 ## 動作条件
 
  * Windows 7以降
- * .NET Framework 4.6
+ * .NET Framework 4.8
 
 ## ダウンロード
 
-:floppy_disk: [ダウンロード](https://github.com/emoacht/PowerMonitor/releases/download/1.5.1/PowerAlert151.zip)
+:floppy_disk: [最新リリース](https://github.com/emoacht/PowerMonitor/releases/latest)
 
 ## 使い方
 
@@ -43,7 +43,7 @@
 
 ## 履歴
 
-:scroll: [履歴](History.md)
+:scroll: [履歴](HISTORY.md)
 
 ## ライセンス
 
