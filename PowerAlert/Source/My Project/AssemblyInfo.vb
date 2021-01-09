@@ -12,7 +12,7 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyDescription("")> 
 <Assembly: AssemblyCompany("")> 
 <Assembly: AssemblyProduct("電気アラート")>
-<Assembly: AssemblyCopyright("Copyright @ 2012-2016 EMO")>
+<Assembly: AssemblyCopyright("Copyright @ 2012 emoacht")>
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>
@@ -31,5 +31,5 @@ Imports System.Runtime.InteropServices
 ' 既定値にすることができます:
 ' <Assembly: AssemblyVersion("1.0.*")> 
 
-<Assembly: AssemblyVersion("1.5.1.44")>
-<Assembly: AssemblyFileVersion("1.5.1.44")>
+<Assembly: AssemblyVersion("1.6.0.45")>
+<Assembly: AssemblyFileVersion("1.6.0.45")>
