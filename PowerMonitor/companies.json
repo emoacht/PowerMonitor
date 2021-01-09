@@ -1,5 +1,5 @@
 ﻿{
-  "ListDate": "08/01/2018 08:00:00 +09:00",
+  "ListDate": "01/09/2021 10:00:00 +09:00",
   "ListUrl": "https://raw.githubusercontent.com/emoacht/PowerMonitor/master/PowerMonitor/companies.json",
   "Companies": [
     {
@@ -10,7 +10,7 @@
     },
     {
       "Name": "東北電力",
-      "Url": "http://setsuden.tohoku-epco.co.jp/common/demand/juyo_02_[yyyyMMdd].csv",
+      "Url": "https://setsuden.nw.tohoku-epco.co.jp/common/demand/juyo_02_[yyyyMMdd].csv",
       "Interval": 5,
       "Offset": 180
     },
@@ -22,25 +22,25 @@
     },
     {
       "Name": "北陸電力",
-      "Url": "http://www.rikuden.co.jp/denki-yoho/csv/juyo_05_[yyyyMMdd].csv",
+      "Url": "http://www.rikuden.co.jp/nw/denki-yoho/csv/juyo_05_[yyyyMMdd].csv",
       "Interval": 10,
       "Offset": 200
     },
     {
       "Name": "中部電力",
-      "Url": "http://denki-yoho.chuden.jp/denki_yoho_content_data/juyo_cepco003.csv",
+      "Url": "https://powergrid.chuden.co.jp/denki_yoho_content_data/juyo_cepco003.csv",
       "Interval": 5,
       "Offset": 0
     },
     {
       "Name": "関西電力",
-      "Url": "http://www.kepco.co.jp/yamasou/juyo1_kansai.csv",
+      "Url": "https://www.kansai-td.co.jp/yamasou/juyo1_kansai.csv",
       "Interval": 5,
       "Offset": 50
     },
     {
       "Name": "中国電力",
-      "Url": "http://www.energia.co.jp/jukyuu/sys/juyo_07_[yyyyMMdd].csv",
+      "Url": "https://www.energia.co.jp/nw/jukyuu/sys/juyo_07_[yyyyMMdd].csv",
       "Interval": 5,
       "Offset": 270
     },
@@ -52,13 +52,13 @@
     },
     {
       "Name": "九州電力",
-      "Url": "http://www.kyuden.co.jp/power_usages/csv/juyo-hourly-[yyyyMMdd].csv",
+      "Url": "https://www.kyuden.co.jp/td_power_usages/csv/juyo-hourly-[yyyyMMdd].csv",
       "Interval": 5,
       "Offset": 270
     },
     {
       "Name": "沖縄電力",
-      "Url": "http://www.okiden.co.jp/denki/juyo_10_[yyyyMMdd].csv",
+      "Url": "https://www.okiden.co.jp/denki2/juyo_10_[yyyyMMdd].csv",
       "Interval": 5,
       "Offset": 20
     }
