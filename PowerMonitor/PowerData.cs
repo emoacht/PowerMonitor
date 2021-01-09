@@ -61,7 +61,7 @@ namespace PowerMonitor
 		/// <summary>
 		/// The starting part of the header for peak supply section
 		/// </summary>
-		private const string PeakSupplyHeaderStart = "ピーク時供給力";
+		private readonly string[] PeakSupplyHeaderStart = new[] { "ピーク時供給力", "電力需要ピーク時供給力" };
 
 		/// <summary>
 		/// The starting part of the header for usage amount section (this must be searched from the bottom)
@@ -86,7 +86,7 @@ namespace PowerMonitor
 					UpdateTime = updateTimeBuff.ToJst();
 			}
 
-			int peakSupplyHeaderIndex = records.FindIndex(x => x.StartsWith(PeakSupplyHeaderStart));
+			int peakSupplyHeaderIndex = records.FindIndex(x => PeakSupplyHeaderStart.Any(y => x.StartsWith(y)));
 			int actualUsageHeaderIndex = records.FindLastIndex(x => x.StartsWith(ActualUsageHeaderStart));
 
 			if ((0 <= peakSupplyHeaderIndex) && (0 <= actualUsageHeaderIndex))
