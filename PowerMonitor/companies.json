@@ -1,10 +1,10 @@
 ﻿{
-  "ListDate": "01/09/2021 10:00:00 +09:00",
+  "ListDate": "03/24/2022 00:00:00 +09:00",
   "ListUrl": "https://raw.githubusercontent.com/emoacht/PowerMonitor/master/PowerMonitor/companies.json",
   "Companies": [
     {
       "Name": "北海道電力",
-      "Url": "http://denkiyoho.hepco.co.jp/area/data/juyo_01_[yyyyMMdd].csv",
+      "Url": "https://denkiyoho.hepco.co.jp/area/data/juyo_01_[yyyyMMdd].csv",
       "Interval": 5,
       "Offset": 250
     },
@@ -16,13 +16,13 @@
     },
     {
       "Name": "東京電力",
-      "Url": "http://www.tepco.co.jp/forecast/html/images/juyo-j.csv",
+      "Url": "https://www.tepco.co.jp/forecast/html/images/juyo-d-j.csv",
       "Interval": 5,
       "Offset": 180
     },
     {
       "Name": "北陸電力",
-      "Url": "http://www.rikuden.co.jp/nw/denki-yoho/csv/juyo_05_[yyyyMMdd].csv",
+      "Url": "https://www.rikuden.co.jp/nw/denki-yoho/csv/juyo_05_[yyyyMMdd].csv",
       "Interval": 10,
       "Offset": 200
     },
@@ -46,7 +46,7 @@
     },
     {
       "Name": "四国電力",
-      "Url": "http://www.yonden.co.jp/denkiyoho/juyo_shikoku.csv",
+      "Url": "https://www.yonden.co.jp/nw/denkiyoho/juyo_shikoku.csv",
       "Interval": 5,
       "Offset": 30
     },
