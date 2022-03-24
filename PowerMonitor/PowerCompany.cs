@@ -33,10 +33,16 @@ namespace PowerMonitor
 		public string Url { get; private set; }
 
 		/// <summary>
+		/// Url where the power forecast should be found
+		/// </summary>
+		[DataMember(Order = 2)]
+		public string ForecastUrl { get; private set; }
+
+		/// <summary>
 		/// Update interval of the power data (min)
 		/// </summary>
 		/// <remarks>This interval will not necessarily match interval of data times.</remarks>
-		[DataMember(Order = 2)]
+		[DataMember(Order = 3)]
 		public int Interval { get; private set; }
 
 		/// <summary>
@@ -44,15 +50,19 @@ namespace PowerMonitor
 		/// </summary>
 		/// <remarks>This offset is to absorb the gap between actual update times and the times
 		/// which starts from 0 min of each hour and moves at update intervals.</remarks>
-		[DataMember(Order = 3)]
+		[DataMember(Order = 4)]
 		public int Offset { get; private set; }
 
 		#endregion
 
-		public PowerCompany(string name, string url, int interval, int offset)
+		public PowerCompany(string name, string url, int interval, int offset) : this(name, url, null, interval, offset)
+		{ }
+
+		public PowerCompany(string name, string url, string forecastUrl, int interval, int offset)
 		{
 			this.Name = name;
 			this.Url = url;
+			this.ForecastUrl = forecastUrl;
 			this.Interval = interval;
 			this.Offset = offset;
 		}
