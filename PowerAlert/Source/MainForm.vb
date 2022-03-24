@@ -372,6 +372,8 @@ Public Class MainForm
 			(notModifiedCount <= notModifiedCountMax)
 
 		SetCheckAlertTime(shallRetry)
+
+		Button_Check.Focus()
 	End Function
 
 	Private Async Function RecordLogAsync(filePath As String, content As String) As Task
@@ -384,6 +386,12 @@ Public Class MainForm
 			Debug.WriteLine(ex)
 		End Try
 	End Function
+
+	Private Sub Button_Forecast_Click(sender As Object, e As EventArgs) Handles Button_Forecast.Click
+		Process.Start(TargetCompany.ForecastUrl)
+
+		Button_Check.Focus()
+	End Sub
 
 #End Region
 
