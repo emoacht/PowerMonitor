@@ -56,6 +56,7 @@ Partial Class MainForm
         Me.TextBox_UsageRateUnit = New System.Windows.Forms.TextBox()
         Me.TextBox_Play = New System.Windows.Forms.TextBox()
         Me.Button_Check = New System.Windows.Forms.Button()
+        Me.Button_Forecast = New System.Windows.Forms.Button()
         Me.ProgressBar_UsageRate = New PowerAlert.FlatProgressBar()
         Me.MenuStrip1.SuspendLayout()
         Me.ContextMenuStrip1.SuspendLayout()
@@ -66,13 +67,26 @@ Partial Class MainForm
         Me.Button_Check.BackColor = System.Drawing.SystemColors.Window
         Me.Button_Check.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.Button_Check.Font = New System.Drawing.Font("Meiryo", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.Button_Check.Location = New System.Drawing.Point(203, 38)
+        Me.Button_Check.Location = New System.Drawing.Point(179, 40)
         Me.Button_Check.Margin = New System.Windows.Forms.Padding(3, 4, 3, 4)
         Me.Button_Check.Name = "Button_Check"
-        Me.Button_Check.Size = New System.Drawing.Size(62, 23)
+        Me.Button_Check.Size = New System.Drawing.Size(40, 23)
         Me.Button_Check.TabIndex = 1
-        Me.Button_Check.Text = "チェック"
+        Me.Button_Check.Text = "更新"
         Me.Button_Check.UseVisualStyleBackColor = False
+        '
+        'Button_Forecast
+        '
+        Me.Button_Forecast.BackColor = System.Drawing.SystemColors.Window
+        Me.Button_Forecast.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button_Forecast.Font = New System.Drawing.Font("Meiryo", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.Button_Forecast.Location = New System.Drawing.Point(225, 40)
+        Me.Button_Forecast.Margin = New System.Windows.Forms.Padding(3, 4, 3, 4)
+        Me.Button_Forecast.Name = "Button_Forecast"
+        Me.Button_Forecast.Size = New System.Drawing.Size(40, 23)
+        Me.Button_Forecast.TabIndex = 2
+        Me.Button_Forecast.Text = "予報"
+        Me.Button_Forecast.UseVisualStyleBackColor = False
         '
         'TextBox_PeakSupply
         '
@@ -367,6 +381,7 @@ Partial Class MainForm
         Me.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.ClientSize = New System.Drawing.Size(274, 171)
         Me.Controls.Add(Me.Button_Check)
+        Me.Controls.Add(Me.Button_Forecast)
         Me.Controls.Add(Me.TextBox_Play)
         Me.Controls.Add(Me.TextBox_UsageRate)
         Me.Controls.Add(Me.TextBox_UsageRateUnit)
@@ -399,6 +414,7 @@ Partial Class MainForm
 
     End Sub
     Friend WithEvents Button_Check As System.Windows.Forms.Button
+    Friend WithEvents Button_Forecast As Button
     Friend WithEvents TextBox_PeakSupply As System.Windows.Forms.TextBox
     Friend WithEvents TextBox_UsageAmount As System.Windows.Forms.TextBox
     Friend WithEvents TextBox_UsageRate As System.Windows.Forms.TextBox
