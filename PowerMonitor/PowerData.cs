@@ -61,7 +61,7 @@ namespace PowerMonitor
 		/// <summary>
 		/// The starting part of the header for peak supply section
 		/// </summary>
-		private readonly string[] PeakSupplyHeaderStart = new[] { "ピーク時供給力", "電力需要ピーク時供給力" };
+		private readonly string[] PeakSupplyHeaderStart = new[] { "ピーク時供給力", "需要ピーク時供給力" };
 
 		/// <summary>
 		/// The starting part of the header for usage amount section (this must be searched from the bottom)
