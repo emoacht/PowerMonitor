@@ -116,7 +116,7 @@ namespace PowerMonitor
 				(
 					name: "東京電力",
 					url: @"https://www.tepco.co.jp/forecast/html/images/juyo-d-j.csv",
-					forecastUrl: "https://www.tepco.co.jp/forecast/index-j.html",
+					forecastUrl: "https://www.tepco.co.jp/forecast/",
 					interval: 5,
 					offset: 180
 				),
@@ -156,7 +156,7 @@ namespace PowerMonitor
 				(
 					name: "四国電力",
 					url: @"https://www.yonden.co.jp/nw/denkiyoho/juyo_shikoku.csv",
-					forecastUrl: "https://www.yonden.co.jp/nw/denkiyoho/index.html",
+					forecastUrl: "https://www.yonden.co.jp/nw/denkiyoho/",
 					interval: 5,
 					offset: 30
 				),
@@ -172,7 +172,7 @@ namespace PowerMonitor
 				(
 					name: "沖縄電力",
 					url: @"https://www.okiden.co.jp/denki2/juyo_10_[yyyyMMdd].csv", // Date part must be replaced with current date.
-					forecastUrl: "https://www.okiden.co.jp/denki2/index.html",
+					forecastUrl: "https://www.okiden.co.jp/denki2/",
 					interval: 5,
 					offset: 20
 				)
