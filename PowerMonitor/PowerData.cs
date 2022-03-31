@@ -61,7 +61,7 @@ namespace PowerMonitor
 		/// <summary>
 		/// The starting part of the header for peak supply section
 		/// </summary>
-		private readonly string[] PeakSupplyHeaderStart = new[] { "ピーク時供給力", "需要ピーク時供給力" };
+		private static readonly string[] PeakSupplyHeaderStart = new[] { "ピーク時供給力", "需要ピーク時供給力" };
 
 		/// <summary>
 		/// The starting part of the header for usage amount section (this must be searched from the bottom)
@@ -81,9 +81,8 @@ namespace PowerMonitor
 			var updateFields = records[0].Split();
 			if (updateFields.Length >= 2)
 			{
-				DateTimeOffset updateTimeBuff;
-				if (DateTimeOffset.TryParse($"{updateFields[0]} {updateFields[1]}", out updateTimeBuff))
-					UpdateTime = updateTimeBuff.ToJst();
+				if (DateTimeOffset.TryParse($"{updateFields[0]} {updateFields[1]}", out DateTimeOffset updateTimeBuffer))
+					UpdateTime = updateTimeBuffer.ToJst();
 			}
 
 			int peakSupplyHeaderIndex = records.FindIndex(x => PeakSupplyHeaderStart.Any(y => x.StartsWith(y)));
@@ -95,9 +94,8 @@ namespace PowerMonitor
 				var supplyFields = records[peakSupplyHeaderIndex + 1].Split(',');
 				if (supplyFields.Length >= 1)
 				{
-					double supplyBuff;
-					if (double.TryParse(supplyFields[0], out supplyBuff))
-						PeakSupply = supplyBuff;
+					if (double.TryParse(supplyFields[0], out double peakSupplyBuffer))
+						PeakSupply = peakSupplyBuffer;
 				}
 
 				DateTimeOffset currentDate = DateTimeOffset.Now.ToJst().Date;
@@ -112,28 +110,25 @@ namespace PowerMonitor
 						break;
 
 					// Get data time.
-					DateTimeOffset dateBuff;
-					if (DateTimeOffset.TryParse(usageFields[0], out dateBuff))
+					if (DateTimeOffset.TryParse(usageFields[0], out DateTimeOffset dateTimeBuffer))
 					{
-						dateBuff = dateBuff.ToJst();
+						dateTimeBuffer = dateTimeBuffer.ToJst();
 
 						// Check if the date is current date.
-						if (dateBuff != currentDate)
+						if (dateTimeBuffer != currentDate)
 							break;
 
-						TimeSpan timeBuff;
-						if (TimeSpan.TryParse(usageFields[1], out timeBuff))
-							DataTime = dateBuff.Add(timeBuff);
+						if (TimeSpan.TryParse(usageFields[1], out TimeSpan timeBuffer))
+							DataTime = dateTimeBuffer.Add(timeBuffer);
 					}
 
 					// Get usage amount.
-					double usageBuff;
-					if (double.TryParse(usageFields[2], out usageBuff))
+					if (double.TryParse(usageFields[2], out double usageAmountBuffer))
 					{
-						if (usageBuff <= 0)
+						if (usageAmountBuffer <= 0)
 							break;
 
-						UsageAmount = usageBuff;
+						UsageAmount = usageAmountBuffer;
 					}
 				}
 			}
