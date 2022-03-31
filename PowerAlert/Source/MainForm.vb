@@ -1087,7 +1087,7 @@ Public Class MainForm
 
 		Await Settings.SaveAsync()
 
-		NotifyIcon1.Visible = False
+		NotifyIcon1.Icon = Nothing
 	End Sub
 
 #End Region
